@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guías de Matemáticas - Semejanza y Tales</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax for rendering math formulas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #2563eb 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 min-h-screen text-slate-800 dark:text-slate-100 flex flex-col justify-between transition-colors duration-300">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm transition-colors duration-300">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="goToCover()">
+                <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-shapes text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-900 dark:text-white text-lg leading-tight">Guías de Matemáticas</h1>
+                    <p class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Semejanza y Teorema de Tales</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <!-- Botón para abrir el Ranking Global de Firebase -->
+                <button id="rankingBtn" onclick="openRankingModal()" class="hidden px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Ranking</span>
+                </button>
+                <button id="navBackBtn" onclick="goToInitialChoice()" class="hidden px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-xs transition flex items-center gap-2 border border-slate-300 dark:border-slate-600">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Volver al Inicio</span>
+                </button>
+                <button onclick="openSettingsModal()" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 flex items-center justify-center transition border border-slate-300 dark:border-slate-600 shadow-sm" title="Configuración">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-grow w-full flex items-center justify-center">
+
+        <!-- ================= SECCIÓN 00: PORTADA INICIAL ================= -->
+        <div id="coverSection" class="w-full max-w-2xl text-center space-y-8 animate-in fade-in duration-300">
+            <div class="relative inline-block">
+                <div class="w-28 h-28 rounded-3xl gradient-bg mx-auto flex items-center justify-center text-white shadow-2xl transform hover:scale-105 transition duration-300">
+                    <i class="fa-solid fa-book-bookmark text-5xl"></i>
+                </div>
+                <span class="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-2 rounded-full text-xs font-bold shadow-lg">
+                    <i class="fa-solid fa-check"></i> 100% Interactivo
+                </span>
+            </div>
+
+            <div class="space-y-3">
+                <span class="px-4 py-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-bold text-xs uppercase tracking-wider">
+                    Plataforma de Ejercitación
+                </span>
+                <h2 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+                    GUÍAS DE MATEMÁTICAS
+                </h2>
+                <p class="text-slate-600 dark:text-slate-300 text-base max-w-lg mx-auto leading-relaxed">
+                    Aprende, ejercita y domina los conceptos de Semejanza de Figuras, Escalas, Teorema y Corolario de Tales con ejercicios dinámicos gráficos.
+                </p>
+            </div>
+
+            <!-- Input de Nombre de Usuario para Firebase -->
+            <div class="w-full max-w-xs mx-auto">
+                <label for="usernameInput" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 text-left">Tu Nombre o Alias para el Ranking:</label>
+                <input type="text" id="usernameInput" placeholder="Ej. Estudiante Pro" maxlength="20" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white font-medium text-sm focus:outline-none focus:border-indigo-500 shadow-sm mb-2">
+            </div>
+
+            <button onclick="enterPlatform()" class="w-full max-w-xs py-4 px-6 rounded-xl gradient-bg text-white font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition transform flex items-center justify-center gap-3 mx-auto">
+                <span>Ingresar a los Ejercicios</span>
+                <i class="fa-solid fa-circle-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- ================= SECCIÓN 01: SELECCIÓN DE CATEGORÍA MATRIZ ================= -->
+        <div id="initialChoiceSection" class="w-full max-w-3xl hidden space-y-8 animate-in fade-in duration-300">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Elección de Contenidos</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">Selecciona una de las áreas temáticas para acceder a sus guías y quizzes.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Tarjeta 1: Geometría (Semejanza y Tales) -->
+                <div onclick="goToGeometriaMenu()" class="glass-card p-6 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 shadow-md hover:shadow-xl transition duration-300 cursor-pointer flex flex-col justify-between group">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-2xl group-hover:bg-indigo-600 group-hover:text-white transition duration-300">
+                            <i class="fa-solid fa-draw-polygon"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">Semejanza de Figuras</h3>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Teorema de Tales, Corolario en Triángulos, Escalas y Figuras Planas.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+                        <span>Ver 5 Temas</span>
+                        <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Procedimientos Básicos -->
+                <div onclick="goToProcedimientosMenu()" class="glass-card p-6 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500 shadow-md hover:shadow-xl transition duration-300 cursor-pointer flex flex-col justify-between group">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl group-hover:bg-emerald-600 group-hover:text-white transition duration-300">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">Procedimientos Básicos</h3>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Operaciones fundamentales: Suma, Resta, Multiplicación y División.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                        <span>Ver 4 Temas</span>
+                        <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN 02A: MENÚ DE GEOMETRÍA ================= -->
+        <div id="geometriaMenuSection" class="w-full max-w-4xl hidden space-y-6 animate-in fade-in duration-300">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900 dark:text-white">Semejanza de Figuras y Tales</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs">Selecciona la guía que deseas resolver</p>
+                </div>
+                <button onclick="goToInitialChoice()" class="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline">
+                    <i class="fa-solid fa-chevron-left mr-1"></i> Volver a Elección
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div onclick="startQuiz('semejanza')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-shapes text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">1. Semejanza de Figuras</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Razones de semejanza $k$ y lados homólogos proporcionales.</p>
+                </div>
+
+                <div onclick="startQuiz('tales')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-bars-staggered text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">2. Teorema de Tales</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Líneas paralelas cortadas por transversales ($L_1 \parallel L_2 \parallel L_3$).</p>
+                </div>
+
+                <div onclick="startQuiz('corolario')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-purple-500 shadow-sm hover:shadow-md cursor-pointer transition ring-2 ring-purple-100 dark:ring-purple-900/30">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-triangle-exclamation text-purple-600 dark:text-purple-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">3. Corolario en Triángulos</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Triángulos superpuestos con recta paralela interior y forma de mariposa.</p>
+                </div>
+
+                <div onclick="startQuiz('escalas')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-ruler-combined text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">4. Escalas y Mapas</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Cálculo de distancias reales en planos y mapas a escala.</p>
+                </div>
+
+                <div onclick="startQuiz('figuras_planas')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-vector-square text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">5. Resolución de Figuras Planas</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Cálculo de lados, perímetros y áreas en polígonos semejantes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN 02B: MENÚ DE PROCEDIMIENTOS BÁSICOS ================= -->
+        <div id="procedimientosMenuSection" class="w-full max-w-4xl hidden space-y-6 animate-in fade-in duration-300">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900 dark:text-white">Procedimientos Básicos</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs">Selecciona la operación para practicar</p>
+                </div>
+                <button onclick="goToInitialChoice()" class="text-xs text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
+                    <i class="fa-solid fa-chevron-left mr-1"></i> Volver a Elección
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div onclick="startQuiz('suma')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-plus text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">1. Suma</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Ejercicios interactivos de adición básica y avanzada.</p>
+                </div>
+
+                <div onclick="startQuiz('resta')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-minus text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">2. Resta</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Sustracción y resolución de diferencias sencillas.</p>
+                </div>
+
+                <div onclick="startQuiz('multiplicacion')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-xmark text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">3. Multiplicación</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Tablas y producto entre números enteros.</p>
+                </div>
+
+                <div onclick="startQuiz('division')" class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 shadow-sm hover:shadow-md cursor-pointer transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-divide text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                        <h4 class="font-bold text-slate-900 dark:text-white">4. División</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Cálculo de cocientes y reparto proporcional.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN 03: INTERFAZ DEL QUIZ ================= -->
+        <div id="quizSection" class="w-full max-w-2xl hidden space-y-6 animate-in fade-in duration-300">
+            <div class="flex items-center justify-between border-b pb-4 border-slate-200 dark:border-slate-700">
+                <span id="questionCounter" class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-3 py-1 rounded-full">Pregunta 1 de 5</span>
+                <button onclick="goToInitialChoice()" class="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold">Abandonar</button>
+            </div>
+
+            <div id="questionText" class="text-lg font-bold text-slate-800 dark:text-slate-100 leading-snug"></div>
+
+            <div id="questionSvg" class="w-full"></div>
+
+            <div id="optionsContainer" class="space-y-3"></div>
+
+            <div id="explanationBox" class="hidden"></div>
+
+            <div class="flex justify-end pt-4">
+                <button id="checkBtn" onclick="checkAnswer()" class="px-6 py-3 rounded-xl gradient-bg text-white font-bold text-sm shadow-md hover:shadow-lg transition">
+                    Comprobar Respuesta
+                </button>
+                <button id="nextBtn" onclick="nextQuestion()" class="hidden px-6 py-3 rounded-xl bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white font-bold text-sm shadow-md transition">
+                    Siguiente Pregunta <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN 04: RESUMEN Y RESULTADOS ================= -->
+        <div id="summarySection" class="w-full max-w-md hidden text-center space-y-6 animate-in fade-in duration-300">
+            <div class="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-black text-slate-900 dark:text-white">¡Quiz Completado!</h3>
+                <p id="summaryUserGreeting" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 mt-1"></p>
+                <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Tu puntaje se ha guardado en el ranking global.</p>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+                <span class="text-xs font-bold text-slate-400 uppercase">Puntaje Obtenido</span>
+                <div id="scoreText" class="text-4xl font-black text-indigo-600 dark:text-indigo-400">0 / 5</div>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="restartCurrentQuiz()" class="flex-1 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-bold text-slate-700 dark:text-slate-200 text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                    Repetir Quiz
+                </button>
+                <button onclick="goToInitialChoice()" class="flex-1 py-3 rounded-xl gradient-bg text-white font-bold text-sm shadow-md hover:shadow-lg transition">
+                    Menú Principal
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= MODAL DE CONFIGURACIÓN ================= -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl p-6 space-y-6 animate-in fade-in zoom-in duration-200">
+            <div class="flex items-center justify-between border-b pb-4 border-slate-200 dark:border-slate-700">
+                <div class="flex items-center space-x-2 text-slate-900 dark:text-white font-bold text-lg">
+                    <i class="fa-solid fa-gear text-indigo-600 dark:text-indigo-400"></i>
+                    <span>Configuración</span>
+                </div>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm font-bold">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                            <i class="fa-solid fa-moon"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900 dark:text-white">Modo Oscuro</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Cambia la apariencia visual de la plataforma</p>
+                        </div>
+                    </div>
+                    <!-- Toggle Switch -->
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-300 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="closeSettingsModal()" class="px-5 py-2.5 rounded-xl gradient-bg text-white font-bold text-sm shadow-md hover:shadow-lg transition">
+                    Guardar y Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL DE RANKING GLOBAL (FIREBASE) ================= -->
+    <div id="rankingModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl p-6 space-y-4 animate-in fade-in zoom-in duration-200">
+            <div class="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-700">
+                <div class="flex items-center space-x-2 text-slate-900 dark:text-white font-bold text-lg">
+                    <i class="fa-solid fa-trophy text-amber-500"></i>
+                    <span>Tabla de Ranking Global</span>
+                </div>
+                <button onclick="closeRankingModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm font-bold">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div id="rankingListContainer" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                <!-- Se inyecta dinámicamente desde Firestore -->
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-center text-xs text-slate-500">
+                    Cargando los mejores puntajes...
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="closeRankingModal()" class="px-5 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold text-xs">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-4 text-center text-xs text-slate-400 transition-colors duration-300">
+        Plataforma de Ejercitación Matemática Interactiva © 2026
+    </footer>
+
+    <!-- ================= SCRIPT DE CONFIGURACIÓN Y FIREBASE SEGURO ================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-y9Uau-_13J-g9ocs74H8uMUlCTmnhao",
+            authDomain: "quiz-matematicas-e68da.firebaseapp.com",
+            projectId: "quiz-matematicas-e68da",
+            storageBucket: "quiz-matematicas-e68da.firebasestorage.app",
+            messagingSenderId: "1028636593201",
+            appId: "1:1028636593201:web:e21046e904273e0bf4d910",
+            measurementId: "G-098X4TEHE8"
+        };
+
+        let db = null;
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            db = getFirestore(app);
+
+            signInAnonymously(auth).catch(err => console.log("Auth anónima restringida:", err));
+        } catch (e) {
+            console.error("Error al inicializar Firebase:", e);
+        }
+
+        window.sendScoreToFirebase = async function(userData) {
+            if (!db) return;
+            try {
+                await addDoc(collection(db, "rankings"), {
+                    name: userData.name,
+                    score: userData.score,
+                    topic: userData.topic,
+                    createdAt: serverTimestamp()
+                });
+            } catch (e) {
+                console.error("Error al guardar puntaje:", e);
+            }
+        };
+
+        window.fetchRankingDataFromFirebase = async function() {
+            const container = document.getElementById('rankingListContainer');
+            if (!db) {
+                container.innerHTML = `<div class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-center text-xs text-rose-500">Base de datos no disponible.</div>`;
+                return;
+            }
+
+            container.innerHTML = `<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-center text-xs text-slate-500">Cargando ranking...</div>`;
+            
+            try {
+                const q = query(collection(db, "rankings"), orderBy("score", "desc"), limit(10));
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) {
+                    container.innerHTML = `<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-center text-xs text-slate-500">Aún no hay puntajes registrados.</div>`;
+                    return;
+                }
+
+                let htmlContent = '';
+                let position = 1;
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const medalColor = position === 1 ? 'text-amber-500 font-black' : (position === 2 ? 'text-slate-400 font-bold' : (position === 3 ? 'text-amber-700 font-bold' : 'text-slate-600 dark:text-slate-400'));
+                    
+                    htmlContent += `
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="${medalColor}">#${position}</span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200">${escapeHtml(data.name || 'Anónimo')}</span>
+                                <span class="text-[10px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-2 py-0.5 rounded">(${data.topic})</span>
+                            </div>
+                            <span class="font-black text-amber-600 dark:text-amber-400">${data.score} / 5 pts</span>
+                        </div>
+                    `;
+                    position++;
+                });
+
+                container.innerHTML = htmlContent;
+            } catch (e) {
+                console.error("Error al obtener ranking:", e);
+                container.innerHTML = `<div class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-center text-xs text-rose-500">Error al conectar con la base de datos.</div>`;
+            }
+        };
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """).replace(/'/g, "'");
+        }
+    </script>
+
+    <!-- ================= SCRIPT GENERAL DE LA APP ================= -->
+    <script>
+        let currentTopic = '';
+        let questionsList = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        let currentUser = {
+            name: "Anónimo",
+            score: 0,
+            topic: "",
+        };
+
+        // Inicializar preferencia de modo oscuro
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('darkModeToggle').checked = true;
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.getElementById('darkModeToggle').checked = false;
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.getElementById('darkModeToggle').checked;
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            }
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+
+        function openRankingModal() {
+            document.getElementById('rankingModal').classList.remove('hidden');
+            if (window.fetchRankingDataFromFirebase) {
+                window.fetchRankingDataFromFirebase();
+            }
+        }
+
+        function closeRankingModal() {
+            document.getElementById('rankingModal').classList.add('hidden');
+        }
+
+        function enterPlatform() {
+            const usernameInput = document.getElementById('usernameInput').value.trim();
+            if (usernameInput !== "") {
+                currentUser.name = usernameInput;
+            }
+            goToInitialChoice();
+        }
+
+        function hideAllSections() {
+            document.getElementById('coverSection').classList.add('hidden');
+            document.getElementById('initialChoiceSection').classList.add('hidden');
+            document.getElementById('geometriaMenuSection').classList.add('hidden');
+            document.getElementById('procedimientosMenuSection').classList.add('hidden');
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('summarySection').classList.add('hidden');
+        }
+
+        function goToCover() {
+            hideAllSections();
+            document.getElementById('coverSection').classList.remove('hidden');
+            document.getElementById('navBackBtn').classList.add('hidden');
+            document.getElementById('rankingBtn').classList.add('hidden');
+        }
+
+        function goToInitialChoice() {
+            hideAllSections();
+            document.getElementById('initialChoiceSection').classList.remove('hidden');
+            document.getElementById('navBackBtn').classList.remove('hidden');
+            document.getElementById('rankingBtn').classList.remove('hidden');
+        }
+
+        function goToGeometriaMenu() {
+            hideAllSections();
+            document.getElementById('geometriaMenuSection').classList.remove('hidden');
+        }
+
+        function goToProcedimientosMenu() {
+            hideAllSections();
+            document.getElementById('procedimientosMenuSection').classList.remove('hidden');
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function startQuiz(topicKey) {
+            currentTopic = topicKey;
+            questionsList = generateQuestions(topicKey, 5);
+            currentQuestionIndex = 0;
+            score = 0;
+
+            hideAllSections();
+            document.getElementById('quizSection').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function restartCurrentQuiz() {
+            startQuiz(currentTopic);
+        }
+
+        function generateQuestions(topicKey, count) {
+            const questions = [];
+            for (let i = 0; i < count; i++) {
+                if (topicKey === 'suma') {
+                    const a = getRandomInt(10, 99);
+                    const b = getRandomInt(10, 99);
+                    const ans = a + b;
+                    questions.push({
+                        title: `Suma: ¿Cuál es el resultado de ${a} + ${b}?`,
+                        svg: `<div class="p-4 bg-emerald-50 dark:bg-emerald-950/50 rounded-xl font-bold text-2xl text-emerald-800 dark:text-emerald-300 text-center">${a} + ${b} = ?</div>`,
+                        ans: ans,
+                        options: [ans, ans + getRandomInt(1, 5), ans - getRandomInt(1, 5), ans + 10].sort(() => Math.random() - 0.5),
+                        explanation: `Para sumar ${a} + ${b}, sumamos las unidades y decenas: ${a} + ${b} = ${ans}.`
+                    });
+                } else if (topicKey === 'resta') {
+                    const a = getRandomInt(30, 99);
+                    const b = getRandomInt(10, a - 1);
+                    const ans = a - b;
+                    questions.push({
+                        title: `Resta: ¿Cuál es el resultado de ${a} - ${b}?`,
+                        svg: `<div class="p-4 bg-rose-50 dark:bg-rose-950/50 rounded-xl font-bold text-2xl text-rose-800 dark:text-rose-300 text-center">${a} - ${b} = ?</div>`,
+                        ans: ans,
+                        options: [ans, ans + getRandomInt(1, 5), ans - getRandomInt(1, 3), ans + 8].sort(() => Math.random() - 0.5),
+                        explanation: `Al restar ${b} a ${a}, obtenemos ${ans}.`
+                    });
+                } else if (topicKey === 'multiplicacion') {
+                    const a = getRandomInt(2, 12);
+                    const b = getRandomInt(2, 12);
+                    const ans = a * b;
+                    questions.push({
+                        title: `Multiplicación: ¿Cuánto es ${a} × ${b}?`,
+                        svg: `<div class="p-4 bg-amber-50 dark:bg-amber-950/50 rounded-xl font-bold text-2xl text-amber-800 dark:text-amber-300 text-center">${a} × ${b} = ?</div>`,
+                        ans: ans,
+                        options: [ans, ans + a, ans - b, (a + 1) * b].sort(() => Math.random() - 0.5),
+                        explanation: `Multiplicando ${a} por ${b} obtenemos ${ans}.`
+                    });
+                } else if (topicKey === 'division') {
+                    const b = getRandomInt(2, 10);
+                    const ans = getRandomInt(2, 10);
+                    const a = b * ans;
+                    questions.push({
+                        title: `División: ¿Cuánto es ${a} ÷ ${b}?`,
+                        svg: `<div class="p-4 bg-sky-50 dark:bg-sky-950/50 rounded-xl font-bold text-2xl text-sky-800 dark:text-sky-300 text-center">${a} ÷ ${b} = ?</div>`,
+                        ans: ans,
+                        options: [ans, ans + 1, ans + 2, ans > 2 ? ans - 1 : ans + 3].sort(() => Math.random() - 0.5),
+                        explanation: `Dividiendo ${a} entre ${b} obtenemos ${ans} porque ${b} × ${ans} = ${a}.`
+                    });
+                } else if (topicKey === 'tales') {
+                    const a = getRandomInt(4, 12);
+                    const b = getRandomInt(2, 8);
+                    const factor = getRandomInt(2, 4);
+                    const c = a * factor;
+                    const ans = b * factor;
+                    const bcProduct = b * c;
+                    questions.push({
+                        title: `Teorema de Tales: Calcula la incógnita x en la figura de rectas paralelas $L_1 \\parallel L_2 \\parallel L_3$.`,
+                        svg: `<div class="my-3 p-3 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl text-center">
+                            <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 block mb-2">Diagrama: Proporción $\\frac{${a}}{${b}} = \\frac{${c}}{x}$</span>
+                            <svg viewBox="0 0 300 120" class="w-full max-w-xs mx-auto stroke-slate-800 dark:stroke-slate-200">
+                                <line x1="10" y1="20" x2="290" y2="20" stroke="#6366f1" stroke-width="2"/>
+                                <line x1="10" y1="60" x2="290" y2="60" stroke="#6366f1" stroke-width="2"/>
+                                <line x1="10" y1="100" x2="290" y2="100" stroke="#6366f1" stroke-width="2"/>
+                                <line x1="60" y1="10" x2="100" y2="110" stroke="currentColor" stroke-width="2"/>
+                                <line x1="240" y1="10" x2="200" y2="110" stroke="currentColor" stroke-width="2"/>
+                                <text x="70" y="45" font-size="12" fill="#818cf8">${a}</text>
+                                <text x="85" y="85" font-size="12" fill="#818cf8">${b}</text>
+                                <text x="230" y="45" font-size="12" fill="#818cf8">${c}</text>
+                                <text x="215" y="85" font-size="12" fill="#fbbf24" font-weight="bold">x</text>
+                            </svg>
+                        </div>`,
+                        ans: ans,
+                        options: [ans, ans + 2, ans + 4, Math.max(1, ans - 2)].sort(() => Math.random() - 0.5),
+                        explanation: `Ordenando los segmentos en proporción: $\\frac{${a}}{${b}} = \\frac{${c}}{x} \\implies ${a}x = ${bcProduct} \\implies x = ${ans}$.`
+                    });
+                } else if (topicKey === 'corolario') {
+                    const mode = i % 2; 
+                    if (mode === 0) {
+                        const ad = getRandomInt(3, 8);
+                        const db = getRandomInt(2, 6);
+                        const factor = getRandomInt(2, 3);
+                        const ae = ad * factor;
+                        const ans = db * factor;
+                        
+                        questions.push({
+                            title: `Corolario de Tales en Triángulos: En el $\\triangle ABC$, la recta $DE$ es paralela a $BC$. Calcula $x = EC$.`,
+                            svg: `<div class="my-3 p-3 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl text-center">
+                                <span class="text-xs font-bold text-purple-600 dark:text-purple-400 block mb-2">Triángulo con Recta Paralela ($DE \\parallel BC$)</span>
+                                <svg viewBox="0 0 280 150" class="w-full max-w-xs mx-auto">
+                                    <polygon points="140,15 30,135 250,135" fill="none" stroke="#a78bfa" stroke-width="2"/>
+                                    <line x1="74" y1="87" x2="206" y2="87" stroke="#60a5fa" stroke-width="3"/>
+                                    <text x="140" y="10" font-size="11" font-weight="bold" text-anchor="middle" fill="#c4b5fd">A</text>
+                                    <text x="20" y="145" font-size="11" font-weight="bold" fill="#c4b5fd">B</text>
+                                    <text x="255" y="145" font-size="11" font-weight="bold" fill="#c4b5fd">C</text>
+                                    <text x="60" y="85" font-size="11" font-weight="bold" fill="#60a5fa">D</text>
+                                    <text x="212" y="85" font-size="11" font-weight="bold" fill="#60a5fa">E</text>
+                                    <text x="90" y="50" font-size="11" fill="#c4b5fd" font-weight="bold">AD = ${ad}</text>
+                                    <text x="40" y="115" font-size="11" fill="#c4b5fd" font-weight="bold">DB = ${db}</text>
+                                    <text x="175" y="50" font-size="11" fill="#c4b5fd" font-weight="bold">AE = ${ae}</text>
+                                    <text x="225" y="115" font-size="11" fill="#fbbf24" font-weight="bold">x</text>
+                                </svg>
+                            </div>`,
+                            ans: ans,
+                            options: [ans, ans + 2, Math.max(1, ans - 1), ans + 3].sort(() => Math.random() - 0.5),
+                            explanation: `Por el Corolario de Tales en el triángulo, la paralela corta los lados proporcionalmente: $\\frac{AD}{DB} = \\frac{AE}{EC} \\implies \\frac{${ad}}{${db}} = \\frac{${ae}}{x} \\implies x = ${ans}$.`
+                        });
+                    } else {
+                        const a = getRandomInt(3, 9);
+                        const b = getRandomInt(2, 6);
+                        const k = getRandomInt(2, 3);
+                        const c = a * k;
+                        const ans = b * k;
+                        questions.push({
+                            title: `Corolario del Teorema de Tales: Encuentra el valor de x en la figura de triángulos semejantes opuestos por el vértice.`,
+                            svg: `<div class="my-3 p-3 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl text-center">
+                                <span class="text-xs font-bold text-purple-600 dark:text-purple-400 block mb-2">Reloj de Arena / Triángulos Semejantes</span>
+                                <svg viewBox="0 0 300 130" class="w-full max-w-xs mx-auto">
+                                    <polygon points="40,20 260,20 40,110 260,110" fill="none" stroke="#a78bfa" stroke-width="2"/>
+                                    <line x1="40" y1="20" x2="260" y2="20" stroke="#60a5fa" stroke-width="3"/>
+                                    <line x1="40" y1="110" x2="260" y2="110" stroke="#60a5fa" stroke-width="3"/>
+                                    <text x="130" y="15" font-size="11" text-anchor="middle" fill="#93c5fd">Bases Paralelas</text>
+                                    <text x="110" y="40" font-size="12" fill="#c4b5fd">${a}</text>
+                                    <text x="175" y="40" font-size="12" fill="#c4b5fd">${b}</text>
+                                    <text x="100" y="95" font-size="12" fill="#c4b5fd">${c}</text>
+                                    <text x="185" y="95" font-size="12" fill="#fbbf24" font-weight="bold">x</text>
+                                </svg>
+                            </div>`,
+                            ans: ans,
+                            options: [ans, ans + 1, ans + 3, Math.max(1, ans - 1)].sort(() => Math.random() - 0.5),
+                            explanation: `Por el Corolario de Tales (triángulos semejantes formados por las transversales): $\\frac{${a}}{${c}} = \\frac{${b}}{x} \\implies x = ${ans}$.`
+                        });
+                    }
+                } else if (topicKey === 'escalas') {
+                    const realDistKm = getRandomInt(2, 10);
+                    const scaleFactor = 100000;
+                    const ansCm = realDistKm * 10;
+                    questions.push({
+                        title: `Escalas: En un mapa a escala $1:${scaleFactor}$, la distancia real entre dos ciudades es de ${realDistKm} km. ¿Cuántos centímetros mide en el mapa?`,
+                        svg: `<div class="p-3 bg-indigo-50 dark:bg-indigo-950/50 rounded-xl text-center font-bold text-indigo-900 dark:text-indigo-300 text-sm">Escala 1 : ${scaleFactor} | Distancia Real = ${realDistKm} km</div>`,
+                        ans: ansCm,
+                        options: [ansCm, ansCm * 2, ansCm / 2, ansCm + 5].sort(() => Math.random() - 0.5),
+                        explanation: `Convertimos ${realDistKm} km a cm ($${realDistKm} \\times 100.000 = ${realDistKm * 100000}$ cm). Luego dividimos entre la escala: $${realDistKm * 100000} \\div ${scaleFactor} = ${ansCm}$ cm.`
+                    });
+                } else if (topicKey === 'figuras_planas') {
+                    const b1 = getRandomInt(3, 8);
+                    const h1 = getRandomInt(4, 10);
+                    const k = getRandomInt(2, 4);
+                    const b2 = b1 * k;
+                    const ansH2 = h1 * k;
+                    const perim1 = 2 * (b1 + h1);
+                    const ansPerim2 = perim1 * k;
+
+                    const type = getRandomInt(1, 2);
+                    if (type === 1) {
+                        questions.push({
+                            title: `Resolución de Figuras Planas: Dos rectángulos son semejantes. El primero tiene base ${b1} cm y altura ${h1} cm. Si la base del segundo es de ${b2} cm, ¿cuál es su altura ($h_2$)?`,
+                            svg: `<div class="my-3 p-3 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl text-center">
+                                <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 block mb-2">Rectángulos Semejantes</span>
+                                <svg viewBox="0 0 280 100" class="w-full max-w-xs mx-auto">
+                                    <rect x="20" y="30" width="40" height="50" fill="none" stroke="#818cf8" stroke-width="2"/>
+                                    <text x="40" y="22" font-size="10" text-anchor="middle" fill="#818cf8">${b1} cm</text>
+                                    <text x="10" y="58" font-size="10" text-anchor="middle" fill="#818cf8">${h1} cm</text>
+                                    
+                                    <rect x="140" y="10" width="80" height="80" fill="none" stroke="#818cf8" stroke-width="2"/>
+                                    <text x="180" y="8" font-size="10" text-anchor="middle" fill="#818cf8">${b2} cm</text>
+                                    <text x="125" y="55" font-size="10" text-anchor="middle" fill="#fbbf24" font-weight="bold">h₂ = ?</text>
+                                </svg>
+                            </div>`,
+                            ans: ansH2,
+                            options: [ansH2, ansH2 + 2, ansH2 - 1 > 0 ? ansH2 - 1 : ansH2 + 3, ansH2 * 2].sort(() => Math.random() - 0.5),
+                            explanation: `Calculamos la razón de semejanza $k = \\frac{${b2}}{${b1}} = ${k}$. Luego multiplicamos la altura por $k$: $h_2 = ${h1} \\times ${k} = ${ansH2}$ cm.`
+                        });
+                    } else {
+                        questions.push({
+                            title: `Resolución de Figuras Planas: Un rectángulo tiene un perímetro de ${perim1} cm. Se construye un rectángulo semejante con razón $k = ${k}$. ¿Cuál es el perímetro de la nueva figura plana?`,
+                            svg: `<div class="p-3 bg-indigo-50 dark:bg-indigo-950/50 rounded-xl text-center font-bold text-indigo-900 dark:text-indigo-300 text-sm">Perímetro inicial $P_1 = ${perim1}$ cm | Razón $k = ${k}$</div>`,
+                            ans: ansPerim2,
+                            options: [ansPerim2, ansPerim2 + 4, perim1 * (k * k), Math.max(2, ansPerim2 - 6)].sort(() => Math.random() - 0.5),
+                            explanation: `La razón entre los perímetros de figuras semejantes es igual a la razón de semejanza lineal $k$. Por lo tanto, $P_2 = P_1 \\times k = ${perim1} \\times ${k} = ${ansPerim2}$ cm.`
+                        });
+                    }
+                } else { // semejanza
+                    const base1 = getRandomInt(4, 10);
+                    const k = getRandomInt(2, 5);
+                    const base2 = base1 * k;
+                    const ansAreaRatio = k * k;
+                    questions.push({
+                        title: `Semejanza: Un rectángulo de base ${base1} cm se amplía a una base de ${base2} cm en la misma proporción. ¿Cuántas veces es mayor el área del nuevo rectángulo?`,
+                        svg: `<div class="p-3 bg-purple-50 dark:bg-purple-950/50 rounded-xl text-center font-bold text-purple-900 dark:text-purple-300 text-sm">Razón de semejanza $k = \\frac{${base2}}{${base1}} = ${k}$</div>`,
+                        ans: ansAreaRatio,
+                        options: [ansAreaRatio, k, k * 2, ansAreaRatio + 2].sort(() => Math.random() - 0.5),
+                        explanation: `La razón de semejanza lineal es $k = ${k}$. La razón entre las áreas es $k^2 = ${k}^2 = ${ansAreaRatio}$ veces mayor.`
+                    });
+                }
+            }
+            return questions;
+        }
+
+        function renderQuestion() {
+            selectedOption = null;
+            const q = questionsList[currentQuestionIndex];
+            
+            document.getElementById('questionCounter').innerText = `Pregunta ${currentQuestionIndex + 1} de ${questionsList.length}`;
+            document.getElementById('questionText').innerHTML = q.title;
+            document.getElementById('questionSvg').innerHTML = q.svg || '';
+            
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            q.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-slate-800 hover:bg-indigo-50/50 dark:hover:bg-slate-700/50 font-medium text-sm text-slate-800 dark:text-slate-100 transition flex items-center justify-between group';
+                btn.setAttribute('data-value', opt);
+                btn.onclick = () => selectOption(btn, opt);
+                btn.innerHTML = `<span>${opt}</span><div class="option-icon-container w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 group-hover:border-indigo-500 flex items-center justify-center text-xs text-white">✓</div>`;
+                container.appendChild(btn);
+            });
+
+            document.getElementById('explanationBox').className = 'hidden';
+            document.getElementById('checkBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function selectOption(btnElement, value) {
+            selectedOption = value;
+            const buttons = document.querySelectorAll('#optionsContainer button');
+            buttons.forEach(b => {
+                b.classList.remove('border-indigo-600', 'bg-indigo-50', 'dark:bg-indigo-950', 'ring-2', 'ring-indigo-200', 'dark:ring-indigo-800');
+            });
+            btnElement.classList.add('border-indigo-600', 'bg-indigo-50', 'dark:bg-indigo-950/50', 'ring-2', 'ring-indigo-200', 'dark:ring-indigo-800');
+        }
+
+        function checkAnswer() {
+            if (selectedOption === null) return;
+            
+            const q = questionsList[currentQuestionIndex];
+            const isCorrect = selectedOption === q.ans;
+            
+            if (isCorrect) score++;
+
+            const buttons = document.querySelectorAll('#optionsContainer button');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50/50', 'cursor-pointer');
+                btn.classList.add('cursor-default');
+
+                const optValue = parseFloat(btn.getAttribute('data-value'));
+                const iconContainer = btn.querySelector('.option-icon-container');
+
+                if (optValue === q.ans) {
+                    btn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-white', 'dark:bg-slate-800', 'border-indigo-600', 'bg-indigo-50', 'ring-2', 'ring-indigo-200');
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-950/50', 'text-emerald-900', 'dark:text-emerald-200', 'font-bold');
+                    iconContainer.className = 'option-icon-container w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shadow-sm';
+                    iconContainer.innerHTML = '<i class="fa-solid fa-check"></i>';
+                } else if (optValue === selectedOption && !isCorrect) {
+                    btn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-white', 'dark:bg-slate-800', 'border-indigo-600', 'bg-indigo-50', 'ring-2', 'ring-indigo-200');
+                    btn.classList.add('border-rose-500', 'bg-rose-50', 'dark:bg-rose-950/50', 'text-rose-900', 'dark:text-rose-200', 'font-bold');
+                    iconContainer.className = 'option-icon-container w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs shadow-sm';
+                    iconContainer.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                } else {
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            const expBox = document.getElementById('explanationBox');
+            expBox.className = `p-4 rounded-xl text-sm ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800' : 'bg-rose-50 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 border border-rose-200 dark:border-rose-800'} space-y-1`;
+            expBox.innerHTML = `
+                <div class="font-bold flex items-center gap-2">
+                    <i class="fa-solid ${isCorrect ? 'fa-circle-check text-emerald-600 dark:text-emerald-400' : 'fa-circle-xmark text-rose-600 dark:text-rose-400'}"></i>
+                    <span>${isCorrect ? '¡Correcto!' : 'Respuesta Incorrecta'}</span>
+                </div>
+                <p class="text-xs">${q.explanation}</p>
+            `;
+
+            document.getElementById('checkBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsList.length) {
+                renderQuestion();
+            } else {
+                showSummary();
+            }
+        }
+
+        function showSummary() {
+            hideAllSections();
+            document.getElementById('summarySection').classList.remove('hidden');
+            document.getElementById('scoreText').innerText = `${score} / ${questionsList.length}`;
+            document.getElementById('summaryUserGreeting').innerText = `Jugador: ${currentUser.name}`;
+
+            currentUser.score = score;
+            currentUser.topic = currentTopic;
+            
+            if (window.sendScoreToFirebase) {
+                window.sendScoreToFirebase(currentUser);
+            }
+        }
+    </script>
+</body>
+</html>
